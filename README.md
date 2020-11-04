@@ -28,3 +28,5 @@ Modify credStore section to be nonsecuredockercredentials
 ```json
 	"credsStore": "nonsecuredockercredentials",
 ```
+
+Add the executable to the system path.
