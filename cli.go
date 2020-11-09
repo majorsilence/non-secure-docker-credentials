@@ -1,6 +1,7 @@
 package main
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -47,6 +48,8 @@ func (h Nonsecuredockercredentials) Add(creds *credentials.Credentials) error {
 	}
 
 	var credValue credentials.Credentials = *creds
+	credValue.Secret = b64.StdEncoding.EncodeToString([]byte(credValue.Secret))
+	credValue.Username = b64.StdEncoding.EncodeToString([]byte(credValue.Username))
 	credsList = append(credsList, credValue)
 	data, _ := json.Marshal(&credsList)
 	folder.WriteFile("settings.json", data)
@@ -98,7 +101,9 @@ func (h Nonsecuredockercredentials) Get(serverURL string) (string, string, error
 
 	for i := range creds {
 		if strings.Compare(creds[i].ServerURL, serverURL) == 0 {
-			return creds[i].Username, creds[i].Secret, nil
+			secret, _ := b64.StdEncoding.DecodeString(creds[i].Secret)
+			username, _ := b64.StdEncoding.DecodeString(creds[i].Username)
+			return string(username), string(secret), nil
 		}
 
 	}
@@ -130,7 +135,8 @@ func (h Nonsecuredockercredentials) List() (map[string]string, error) {
 	resp := make(map[string]string)
 	for i := range creds {
 		fmt.Printf(creds[i].ServerURL)
-		resp[creds[i].ServerURL] = creds[i].Username
+		username, _ := b64.StdEncoding.DecodeString(creds[i].Username)
+		resp[creds[i].ServerURL] = string(username)
 	}
 
 	return resp, nil
