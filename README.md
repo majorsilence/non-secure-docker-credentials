@@ -8,7 +8,7 @@ This project is a torn apart copy of wincred to learn how the docker credential 
 
 
 # Warning
-All credentials are saved in plain text.  You should not use this if that is a problem.
+All credentials are saved in plain text (base 64).  You should not use this if that is a problem.
 
 
 
@@ -30,3 +30,7 @@ Modify credStore section to be nonsecuredockercredentials
 ```
 
 Add the executable to the system path.
+
+```powershell
+[Environment]::SetEnvironmentVariable("the path to the folder with docker-credential-nonsecuredockercredentials.exe", $env:Path, [System.EnvironmentVariableTarget]::Machine)
+```

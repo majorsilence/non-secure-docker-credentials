@@ -34,16 +34,22 @@ func (h Nonsecuredockercredentials) Add(creds *credentials.Credentials) error {
 
 	configDirs := configdir.New("majorsilence", "nonsecuredockercredentials")
 
+	folder := configDirs.QueryFolders(configdir.Global)[0]
+
 	configDirs.LocalPath = configDirs.QueryFolders(configdir.Global)[0].Path
 	var credsList []credentials.Credentials
 
-	folder := configDirs.QueryFolderContainsFile("settings.json")
+	if folder.Exists("settings.json") == false {
+		folder.Create("settings.json")
+	}
+
 	if folder != nil {
 		data, err := folder.ReadFile("settings.json")
 		if err != nil {
 			fmt.Println("File reading error", err)
 			return err
 		}
+
 		json.Unmarshal(data, &credsList)
 	}
 
