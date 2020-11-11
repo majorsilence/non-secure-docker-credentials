@@ -53,6 +53,25 @@ func (h Nonsecuredockercredentials) Add(creds *credentials.Credentials) error {
 		json.Unmarshal(data, &credsList)
 	}
 
+	for i := range credsList {
+		if strings.Compare(credsList[i].ServerURL, creds.ServerURL) == 0 {
+			// Handle pre-existing credentials
+			secret, _ := b64.StdEncoding.DecodeString(credsList[i].Secret)
+			username, _ := b64.StdEncoding.DecodeString(credsList[i].Username)
+			if strings.Compare(string(secret), creds.Secret) == 0 && strings.Compare(string(username), creds.Username) == 0 {
+				return nil
+			} else {
+				credsList[i].Secret = b64.StdEncoding.EncodeToString([]byte(creds.Secret))
+				credsList[i].Username = b64.StdEncoding.EncodeToString([]byte(creds.Username))
+				data, _ := json.Marshal(&credsList)
+				folder.WriteFile("settings.json", data)
+				return nil
+			}
+		}
+
+	}
+
+	// handle new server credential
 	var credValue credentials.Credentials = *creds
 	credValue.Secret = b64.StdEncoding.EncodeToString([]byte(credValue.Secret))
 	credValue.Username = b64.StdEncoding.EncodeToString([]byte(credValue.Username))
@@ -111,7 +130,6 @@ func (h Nonsecuredockercredentials) Get(serverURL string) (string, string, error
 			username, _ := b64.StdEncoding.DecodeString(creds[i].Username)
 			return string(username), string(secret), nil
 		}
-
 	}
 
 	return "", "", credentials.NewErrCredentialsNotFound()
