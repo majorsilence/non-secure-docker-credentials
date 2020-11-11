@@ -19,6 +19,14 @@ All credentials are saved in plain text (base 64).  You should not use this if t
 go build -o docker-credential-nonsecuredockercredentials.exe
 ```
 
+Or run the build script to also include generating a choco package.
+
+```powershell
+.\build.ps1
+```
+
+
+
 # Usage
 
 Find your dockers config.json.
