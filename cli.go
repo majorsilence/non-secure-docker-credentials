@@ -15,7 +15,7 @@ func main() {
 	credentials.Serve(Nonsecuredockercredentials{})
 }
 
-// Wincred handles secrets using the Windows credential service.
+// Nonsecuredockercredentials handles secrets using a json file and base64 strings.
 type Nonsecuredockercredentials struct{}
 
 type cred struct {
@@ -29,7 +29,7 @@ type credList struct {
 	Creds []cred
 }
 
-// Add adds new credentials to the windows credentials manager.
+// Add adds new credentials to the C:\Users\[The User Name]\AppData\Roaming\majorsilence\nonsecuredockercredentials\settings.json file.
 func (h Nonsecuredockercredentials) Add(creds *credentials.Credentials) error {
 
 	configDirs := configdir.New("majorsilence", "nonsecuredockercredentials")
@@ -63,7 +63,7 @@ func (h Nonsecuredockercredentials) Add(creds *credentials.Credentials) error {
 	return nil
 }
 
-// Delete removes credentials from the windows credentials manager.
+// Delete removes credentials from the C:\Users\[The User Name]\AppData\Roaming\majorsilence\nonsecuredockercredentials\settings.json file.
 func (h Nonsecuredockercredentials) Delete(serverURL string) error {
 	configDirs := configdir.New("majorsilence", "nonsecuredockercredentials")
 	var creds []credentials.Credentials
@@ -91,7 +91,7 @@ func (h Nonsecuredockercredentials) Delete(serverURL string) error {
 	return nil
 }
 
-// Get retrieves credentials from the windows credentials manager.
+// Get retrieves credentials from the C:\Users\[The User Name]\AppData\Roaming\majorsilence\nonsecuredockercredentials\settings.json file.
 func (h Nonsecuredockercredentials) Get(serverURL string) (string, string, error) {
 
 	configDirs := configdir.New("majorsilence", "nonsecuredockercredentials")
