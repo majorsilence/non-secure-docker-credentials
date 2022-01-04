@@ -29,9 +29,9 @@ Or run the build script to also include generating a choco package.
 
 # Usage
 
-Find your dockers config.json.
+Find your dockers config.json.   On windows __C:\Users\[Your User Name]\.docker\config.json__.
 
-Modify credStore section to be nonsecuredockercredentials
+Modify credsStore section to be nonsecuredockercredentials
 
 ```json
 	"credsStore": "nonsecuredockercredentials",
